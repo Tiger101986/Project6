@@ -14,12 +14,16 @@ const express = require('express');
  * This allows you to overcome many of the obstacles and objections people have concerning NoSQL databases,
  * meaning you can use your JavaScript knowledge to manage an even more functional database! 
  */
-const mongoose = require('mongoose');
 
 /**
  * MongoDB Connection: mongodb+srv://kanharob:<password>@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority 
  * MongoDB Password:5l0hp1ab0jFENSJ3
  */
+const mongoose = require('mongoose');
+
+//import models folder 
+const Thing = require('./models/thing');
+
 const app = express();
 app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
 
@@ -50,8 +54,32 @@ app.use((req, res, next) => {
  * Change use() to get() -- app.use('/api/sauce', (req, res, next)
  */
 app.post('/api/sauces', (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({nessage: 'Thing created successfully'});
+    const thing = new Thing({
+        userId: req.body.userId,
+        name: req.body.name,
+        manufacturer: req.body.manufacturer,
+        description: req.body.description,
+        mainPepper: req.body.mainPepper,
+        imageUrl: req.body.imageUrl,
+        heat: req.body.heat,
+        likes: req.body.likes,
+        dislikes: req.body.dislikes,
+        usersLiked: req.body.usersLiked,
+        usersDisliked: req.body.usersDisliked,
+    });
+    thing.save()
+        .then(() => {
+            res.status(201).json({
+                message: 'Post saved successfully!'
+            });
+        })
+        .catch(
+            (error) => {
+                res.status(400).json({
+                    error: error
+                });
+            }
+        );
 })
 
 app.get('/api/sauces', (req, res, next) => {
