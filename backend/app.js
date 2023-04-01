@@ -3,7 +3,7 @@
  * Express app is a series of functions called middleware.
  * Each piece of middleware receives the request and response objects and can read, parse, and manipulate them as necessary.
  * Express middleware also gets the following method, which allows that middleware to pass execution on to the next piece. 
-*/ 
+*/
 const express = require('express');
 
 /**
@@ -28,13 +28,13 @@ const app = express();
 app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
 
 mongoose.connect('mongodb+srv://kanharob:5l0hp1ab0jFENSJ3@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority')
-.then(() =>{
-    console.log('successfully connected to MongoDB Atlas!');
-})
-.catch((error) => {
-    console.log('unable to connect to MongoDB Atlas!');
-    console.error(error);
-})
+    .then(() => {
+        console.log('successfully connected to MongoDB Atlas!');
+    })
+    .catch((error) => {
+        console.log('unable to connect to MongoDB Atlas!');
+        console.error(error);
+    })
 
 
 /**
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
-  });
+});
 
 /**
  * add some middleware 
@@ -85,14 +85,62 @@ app.post('/api/sauces', (req, res, next) => {
         );
 });
 
-// Retrieving a Specific Thing - Single sauce
+// Retrieving a Specific Thing - Single sauce with .get() and findOne() methods
 app.get('/api/sauces/:id', (req, res, next) => {
     Thing.findOne({
         _id: req.params.id
     }).then((things) => {
         res.status(200).json(things);
     })
-    .catch(
+        .catch(
+            (error) => {
+                res.status(400).json({
+                    error: error
+                });
+            }
+        );
+});
+
+//Update an existing Thing with .put() and updateOne() methods
+app.put('/api/sauces/:id', (req, res, next) => {
+    const thing = new Thing({
+        _id: req.params.id,
+        userId: req.body.userId,
+        name: req.body.name,
+        manufacturer: req.body.manufacturer,
+        description: req.body.description,
+        mainPepper: req.body.mainPepper,
+        imageUrl: req.body.imageUrl,
+        heat: req.body.heat,
+        likes: req.body.likes,
+        dislikes: req.body.dislikes,
+        usersLiked: req.body.usersLiked,
+        usersDisliked: req.body.usersDisliked,
+    });
+    Thing.updateOne({ _id: req.params.id }, thing).then(
+        () => {
+            res.status(201).json({
+                message: 'Thing updated successfully!'
+            });
+        }
+    ).catch(
+        (error) => {
+            res.status(400).json({
+                error: error
+            });
+        }
+    );
+});
+
+//Delete a Thing with .delete() and deleteOne() methods
+app.delete('/api/sauces/:id', (req, res, next) => {
+    Thing.deleteOne({ _id: req.params.id }).then(
+        () => {
+            res.status(200).json({
+                message: 'Deleted!'
+            });
+        }
+    ).catch(
         (error) => {
             res.status(400).json({
                 error: error
@@ -102,11 +150,10 @@ app.get('/api/sauces/:id', (req, res, next) => {
 });
 
 // Retrieving a list of Thing - Array sauces
-app.get('/api/sauces', (req, res, next) => {
+app.use('/api/sauces', (req, res, next) => {
     Thing.find().then((things) => {
         res.status(200).json(things);
-    })
-    .catch(
+    }).catch(
         (error) => {
             res.status(400).json({
                 error: error
