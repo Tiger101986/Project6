@@ -21,8 +21,8 @@ const express = require('express');
  */
 const mongoose = require('mongoose');
 
-//import models folder 
-const Thing = require('./models/thing');
+//import routes folder 
+const sauceRoutes = require('./routes/sauces');
 
 const app = express();
 app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
@@ -49,118 +49,9 @@ app.use((req, res, next) => {
     next();
 });
 
-/**
- * add some middleware 
- * Change use() to get() and post()-- app.use('/api/sauce', (req, res, next)
- * Use save() method to save Thing from .post() user input
- * Use find() method to get all Things in Database from .get()
- * Use findOne() method to gets specific/single one Thing from .get()
- */
-app.post('/api/sauces', (req, res, next) => {
-    const thing = new Thing({
-        userId: req.body.userId,
-        name: req.body.name,
-        manufacturer: req.body.manufacturer,
-        description: req.body.description,
-        mainPepper: req.body.mainPepper,
-        imageUrl: req.body.imageUrl,
-        heat: req.body.heat,
-        likes: req.body.likes,
-        dislikes: req.body.dislikes,
-        usersLiked: req.body.usersLiked,
-        usersDisliked: req.body.usersDisliked,
-    });
-    thing.save()
-        .then(() => {
-            res.status(201).json({
-                message: 'Post saved successfully!'
-            });
-        })
-        .catch(
-            (error) => {
-                res.status(400).json({
-                    error: error
-                });
-            }
-        );
-});
+app.use('/api/sauces',sauceRoutes);
+    
 
-// Retrieving a Specific Thing - Single sauce with .get() and findOne() methods
-app.get('/api/sauces/:id', (req, res, next) => {
-    Thing.findOne({
-        _id: req.params.id
-    }).then((things) => {
-        res.status(200).json(things);
-    })
-        .catch(
-            (error) => {
-                res.status(400).json({
-                    error: error
-                });
-            }
-        );
-});
-
-//Update an existing Thing with .put() and updateOne() methods
-app.put('/api/sauces/:id', (req, res, next) => {
-    const thing = new Thing({
-        _id: req.params.id,
-        userId: req.body.userId,
-        name: req.body.name,
-        manufacturer: req.body.manufacturer,
-        description: req.body.description,
-        mainPepper: req.body.mainPepper,
-        imageUrl: req.body.imageUrl,
-        heat: req.body.heat,
-        likes: req.body.likes,
-        dislikes: req.body.dislikes,
-        usersLiked: req.body.usersLiked,
-        usersDisliked: req.body.usersDisliked,
-    });
-    Thing.updateOne({ _id: req.params.id }, thing).then(
-        () => {
-            res.status(201).json({
-                message: 'Thing updated successfully!'
-            });
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
-            });
-        }
-    );
-});
-
-//Delete a Thing with .delete() and deleteOne() methods
-app.delete('/api/sauces/:id', (req, res, next) => {
-    Thing.deleteOne({ _id: req.params.id }).then(
-        () => {
-            res.status(200).json({
-                message: 'Deleted!'
-            });
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
-            });
-        }
-    );
-});
-
-// Retrieving a list of Thing - Array sauces
-app.use('/api/sauces', (req, res, next) => {
-    Thing.find().then((things) => {
-        res.status(200).json(things);
-    }).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
-            });
-        }
-    );
-});
 /* app.use((req, res, next) => {
     console.log('Request received');
     next;
