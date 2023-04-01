@@ -5,6 +5,15 @@
  * Express middleware also gets the following method, which allows that middleware to pass execution on to the next piece. 
 */ 
 const express = require('express');
+
+/**
+ * Mongoose is a handy package for interacting with a MongoDB database. It can handle:
+ * Data validation.
+ * Relationships between documents.
+ * Direct communication with the database for reading and writing documents.
+ * This allows you to overcome many of the obstacles and objections people have concerning NoSQL databases,
+ * meaning you can use your JavaScript knowledge to manage an even more functional database! 
+ */
 const mongoose = require('mongoose');
 
 /**
