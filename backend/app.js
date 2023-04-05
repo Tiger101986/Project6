@@ -21,8 +21,11 @@ const express = require('express');
  */
 const mongoose = require('mongoose');
 
-//import routes folder 
+//import sauces routes 
 const sauceRoutes = require('./routes/sauces');
+
+// import user route
+const userRoutes = require('./routes/user');
 
 const app = express();
 app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
@@ -50,6 +53,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/sauces',sauceRoutes);
+app.use('/api/authentication', userRoutes);
     
 
 /* app.use((req, res, next) => {
