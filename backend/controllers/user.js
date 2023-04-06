@@ -1,6 +1,7 @@
 //import bcrypt and user models
 const bcrypt = require('bcrypt');
-const User = require('./models/user');
+const jsonwebtoken = require('jsonwebtoken');
+const User = require('../models/user');
 
 // Use Promise .then() with bcrypt's hash() method, use it to save users' passwords securely in the database 
 exports.signUp = (req, res, next) => {
@@ -38,6 +39,10 @@ exports.logIn = (req, res, next) => {
                             error: new Error('Incorrent password!')
                         });
                     }
+                    const token = jwt.sign(
+                        { userId: user._id },
+                        'RANDOM_TOKEN_SECRET',
+                        { expiresIn: '24h' });
                     res.status(200).json({
                         userId: user._id,
                         token: 'token'
