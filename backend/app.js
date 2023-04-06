@@ -19,13 +19,11 @@ const express = require('express');
  * MongoDB Connection: mongodb+srv://kanharob:<password>@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority 
  * MongoDB Password:5l0hp1ab0jFENSJ3
  */
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); //import mongoose
 
-//import sauces routes 
-const sauceRoutes = require('./routes/sauces');
+const sauceRoutes = require('./routes/sauces'); //import sauces routes 
 
-// import user route
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/user'); //import user route
 
 const app = express();
 app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
@@ -53,7 +51,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/sauces',sauceRoutes);
-app.use('/api/authentication', userRoutes);
+app.use('/api/auth', userRoutes);
     
 
 /* app.use((req, res, next) => {

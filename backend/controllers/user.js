@@ -32,6 +32,9 @@ exports.logIn = (req, res, next) => {
                     error: new Error('User not found!')
                 });
             }
+            /**
+             * use bcrypt.compare() to compare user password input with password in database 
+             */
             bcrypt.compare(req.body.password, user.password).then(
                 (valid) => {
                     if (!valid) {
@@ -39,13 +42,18 @@ exports.logIn = (req, res, next) => {
                             error: new Error('Incorrent password!')
                         });
                     }
-                    const token = jwt.sign(
-                        { userId: user._id },
-                        'RANDOM_TOKEN_SECRET',
-                        { expiresIn: '24h' });
+                    /**
+                     * JSON web tokens are encoded tokens that can be used for authorization.
+                     * The  jsonwebtoken  package's  sign()  method uses a secret key to encode a token 
+                     * which can contain a custom payload and be valid for a limited time.
+                     */
+                    const token = jsonwebtoken.sign(
+                        { userId: user._id }, //user id
+                        'RANDOM_TOKEN_SECRET', // secret password
+                        { expiresIn: '24h' }); // expiration time
                     res.status(200).json({
                         userId: user._id,
-                        token: 'token'
+                        token: token
                     });
                 }
             ).catch(
