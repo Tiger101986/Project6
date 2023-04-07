@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const multer = require('..middleware/multer-config');
 const sauceControllers = require('../controllers/sauces');
 
 /**
@@ -16,7 +17,7 @@ const sauceControllers = require('../controllers/sauces');
 
 // Replace app to router and each segment (api/sauces) to (/) instead after cut all of routes from app.js file to put inside sauces.js router
 //Get and save data from user input 
-router.post('/', auth, sauceControllers.createThing);
+router.post('/', auth, multer, sauceControllers.createThing);
 
 // Retrieving a Specific Thing - Single sauce with .get() and findOne() methods
 router.get('/:id', auth, sauceControllers.getOneThing);
