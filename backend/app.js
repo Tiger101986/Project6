@@ -20,6 +20,7 @@ const express = require('express');
  * MongoDB Password:5l0hp1ab0jFENSJ3
  */
 const mongoose = require('mongoose'); //import mongoose
+const path = require('path');//import path
 
 const sauceRoutes = require('./routes/sauces'); //import sauces routes 
 
@@ -28,7 +29,7 @@ const userRoutes = require('./routes/user'); //import user route
 const app = express();
 app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://kanharob:5l0hp1ab0jFENSJ3@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority`)
     .then(() => {
         console.log('successfully connected to MongoDB Atlas!');
     })
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/images', express.static(path.join(__dirname, 'images')));  
 app.use('/api/sauces',sauceRoutes);
 app.use('/api/auth', userRoutes);
     

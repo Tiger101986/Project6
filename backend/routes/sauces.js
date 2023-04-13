@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const multer = require('..middleware/multer-config');
+const multer = require('../middleware/multer-config');
 const sauceControllers = require('../controllers/sauces');
 
 /**
@@ -17,19 +17,19 @@ const sauceControllers = require('../controllers/sauces');
 
 // Replace app to router and each segment (api/sauces) to (/) instead after cut all of routes from app.js file to put inside sauces.js router
 //Get and save data from user input 
-router.post('/', auth, multer, sauceControllers.createThing);
+router.post('/', auth, multer, sauceControllers.createSauce);
 
 // Retrieving a Specific Thing - Single sauce with .get() and findOne() methods
-router.get('/:id', auth, sauceControllers.getOneThing);
+router.get('/:id', auth, sauceControllers.getOneSauce);
 
 //Update an existing Thing with .put() and updateOne() methods
-router.put('/:id', auth, sauceControllers.modifyThing);
+router.put('/:id', auth, sauceControllers.modifySauce);
 
 //Delete a Thing with .delete() and deleteOne() methods
-router.delete('/:id', auth, sauceControllers.deleteThing);
+router.delete('/:id', auth, sauceControllers.deleteSauce);
 
 // Retrieving a list of Thing - Array sauces
-router.get('/', auth, sauceControllers.getAllThings);
+router.get('/', auth, sauceControllers.getAllSauces);
 
 //export router
 module.exports = router;

@@ -1,6 +1,6 @@
 /**
  * install multer package
- * import multer pacakage
+ * import multer pacakage to upload files
  */
 const multer = require('multer');
 

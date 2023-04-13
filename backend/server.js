@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 /** 
  * import Node native http package and use it to create a server
  * by passing a function that will be executed every time a call is made to that server
