@@ -1,5 +1,6 @@
 //import models folder 
 const Sauce = require('../models/sauce');
+const fileSystem = require('fs')
 
 exports.createSauce = (req, res, next) => {
     const url = req.protocol + '://' + req.get('host');
@@ -49,7 +50,7 @@ exports.getOneSauce = (req, res, next) => {
 
 //Update an existing Sauce with .put() and updateOne() methods
 exports.modifySauce = (req, res, next) => {
-    let sauce = new Sauce({_id: req.params._id});
+    let sauce = new Sauce({ _id: req.params._id });
     if (req.file) {
         const url = req.protocol + '://' + req.get(host);
         req.body.sauce = JSON.parse(req.body.sauce);
@@ -98,7 +99,7 @@ exports.modifySauce = (req, res, next) => {
     );
 }
 
-//Delete a Thing with .delete() and deleteOne() methods
+//Delete a Sauce with .findOne(), fs.unlink() and deleteOne() methods
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id }).then(
         (sauce) => {
@@ -112,22 +113,25 @@ exports.deleteSauce = (req, res, next) => {
                     error: new Error('Unauthorized request!')
                 });
             }
-        }
-    )
-    Sauce.deleteOne({ _id: req.params.id }).then(
-        () => {
-            res.status(200).json({
-                message: 'Deleted!'
-            });
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
+            const filename = sauce.imageUrl.split('/images/')[1];
+            fileSystem.unlink('images/' + filename, () => {
+                Sauce.deleteOne({ _id: req.params.id }).then(
+                    () => {
+                        res.status(200).json({
+                            message: 'Deleted!'
+                        });
+                    }
+                ).catch(
+                    (error) => {
+                        res.status(400).json({
+                            error: error
+                        });
+                    }
+                );
             });
         }
     );
-}
+};
 
 // Retrieving a list of Thing - Array sauces
 exports.getAllSauces = (req, res, next) => {
