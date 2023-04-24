@@ -52,7 +52,7 @@ exports.getOneSauce = (req, res, next) => {
 exports.modifySauce = (req, res, next) => {
     let sauce = new Sauce({ _id: req.params._id });
     if (req.file) {
-        const url = req.protocol + '://' + req.get(host);
+        const url = req.protocol + '://' + req.get('host');
         req.body.sauce = JSON.parse(req.body.sauce);
         sauce = {
             _id: req.params.id,
@@ -145,3 +145,54 @@ exports.getAllSauces = (req, res, next) => {
         }
     );
 }
+
+/**
+ * TODO: 
+ * The id for the post will be in the url, and can be fetched in the code from req.params.id 
+ * (just like what was done for getting one post based on the id provided in the url)
+ * The userId and “like” number (either 1, 0, or -1 -- see API requirements) will be provided in the req.body
+ *  (just like when the sauce is updated)
+ * if like is “1", then check to see if the user has already disliked the sauce -- and if so, 
+ * then remove their user id from the dislikes array and decrease the dislike count
+ * if the like is “-1”, do the opposite of what is described for “1"
+ * if the like is “0”, then do what is. being done for “1" and “-1” to remove the user (if exists) from either likes or dislikes info
+ * Use Sequelize the update the sauce (like you did for update sauce, but this time for the updated like information)
+    * likes: 0,
+    * dislikes: 0,
+    * usersLiked: [],
+    * usersDisliked: [],                                
+*/
+
+// Save likes status from users
+exports.likeSauce = (req, res, next) => {
+    let like = req.body.like;
+    let userId = req.body.userId;
+    Sauce.findOne({ _id: req.params.id }).then(sauce => {
+        if (like === 1) {
+            if (!sauce.usersLiked.includes(userId)) {
+                sauce.usersLiked.push(userId);
+                sauce.likes++;
+            }
+        }
+        if (like === 0) {
+            if (sauce.usersLiked.includes(userId)) {
+                sauce.usersLiked = sauce.usersLiked.filter(id => id !== userId);
+                sauce.likes--;
+            }
+            if (sauce.usersDisliked.includes(userId)) {
+                sauce.usersDisliked = sauce.usersDisliked.filter(id => id !== userId);
+                sauce.dislikes--;
+            }
+
+        }
+        if (like === -1) {
+            if (!sauce.usersDisliked.includes(userId)) {
+                sauce.usersDisliked.push(userId)
+                sauce.dislikes++;
+            }
+        }
+        Sauce.updateOne({ _id: req.params.id }, sauce).then(() => {
+            res.status(201).json({ message: 'Sauce updated successfully.' })
+        })
+    })
+} 

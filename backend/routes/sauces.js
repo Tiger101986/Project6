@@ -23,13 +23,16 @@ router.post('/', auth, multer, sauceControllers.createSauce);
 router.get('/:id', auth, sauceControllers.getOneSauce);
 
 //Update an existing Thing with .put() and updateOne() methods
-router.put('/:id', auth, sauceControllers.modifySauce);
+router.put('/:id', auth, multer, sauceControllers.modifySauce);
 
 //Delete a Thing with .delete() and deleteOne() methods
 router.delete('/:id', auth, sauceControllers.deleteSauce);
 
 // Retrieving a list of Thing - Array sauces
 router.get('/', auth, sauceControllers.getAllSauces);
+
+//select like
+router.post('/:id/like', auth, sauceControllers.likeSauce);
 
 //export router
 module.exports = router;
