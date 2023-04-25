@@ -1,37 +1,26 @@
-//import express to set up route with Router() method
+//import express to set up routes with Router() method
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 const sauceControllers = require('../controllers/sauces');
 
-/**
- * add some middleware 
- * Change use() to get() and post()-- app.use('/api/sauce', (req, res, next)
- * Use save() method to save Thing from .post() user input
- * Use find() method to get all Things in Database from .get()
- * Use findOne() method to gets specific/single one Thing from .get()
- * Use updateOne() method to modify an existing Thing from .put()
- * Use deleteOne() method to delete a Thing from .delete()
- */
-
-// Replace app to router and each segment (api/sauces) to (/) instead after cut all of routes from app.js file to put inside sauces.js router
-//Get and save data from user input 
+// Create sauce router with .post() method
 router.post('/', auth, multer, sauceControllers.createSauce);
 
-// Retrieving a Specific Thing - Single sauce with .get() and findOne() methods
+// Retrieving a Specific sauce - Single sauce router with .get() methods
 router.get('/:id', auth, sauceControllers.getOneSauce);
 
-//Update an existing Thing with .put() and updateOne() methods
+//Update an existing sauce router with .put()methods
 router.put('/:id', auth, multer, sauceControllers.modifySauce);
 
-//Delete a Thing with .delete() and deleteOne() methods
+//Delete sauce router with .delete() methods
 router.delete('/:id', auth, sauceControllers.deleteSauce);
 
-// Retrieving a list of Thing - Array sauces
+// Retrieving a list of sauces - Array sauces router with get() method
 router.get('/', auth, sauceControllers.getAllSauces);
 
-//select like
+//Users like status router 
 router.post('/:id/like', auth, sauceControllers.likeSauce);
 
 //export router

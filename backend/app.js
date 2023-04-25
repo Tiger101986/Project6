@@ -1,19 +1,8 @@
 /**
  * install Express frame work in backend folder and import express method in app.js 
- * Express app is a series of functions called middleware.
- * Each piece of middleware receives the request and response objects and can read, parse, and manipulate them as necessary.
- * Express middleware also gets the following method, which allows that middleware to pass execution on to the next piece. 
+  
 */
 const express = require('express');
-
-/**
- * Mongoose is a handy package for interacting with a MongoDB database. It can handle:
- * Data validation.
- * Relationships between documents.
- * Direct communication with the database for reading and writing documents.
- * This allows you to overcome many of the obstacles and objections people have concerning NoSQL databases,
- * meaning you can use your JavaScript knowledge to manage an even more functional database! 
- */
 
 /**
  * MongoDB Connection: mongodb+srv://kanharob:<password>@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority 
@@ -27,7 +16,7 @@ const sauceRoutes = require('./routes/sauces'); //import sauces routes
 const userRoutes = require('./routes/user'); //import user route
 
 const app = express();
-app.use(express.json());// OR const bodyParser = require(body.parser'); app.use(bodyParser.json());
+app.use(express.json());
 
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@clusterjavascript.eeqpc6c.mongodb.net/?retryWrites=true&w=majority`)
     .then(() => {
@@ -39,11 +28,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
     })
 
 
-/**
- * CORS stands for cross-origin resource sharing.
- * It is a standard that allows you to relax default security rules that prevent HTTP calls between servers.
- * You want your two origins: localhost:3000 and localhost:4200, to communicate with each other
- */
+//Set up headers with CORS (cross-origin resource sharing) 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -54,22 +39,5 @@ app.use((req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, 'images')));  
 app.use('/api/sauces',sauceRoutes);
 app.use('/api/auth', userRoutes);
-    
-
-/* app.use((req, res, next) => {
-    console.log('Request received');
-    next;
-});
-app.use((req, res, next) => {
-    res.status(201);
-    next;
-});
-app.use((req, res) => {
-    res.json({message: 'your request was successful'});
-    next;
-});
-app.use((req, res, next) => {
-    console.log('Response sent successfullly!');
-}); */
 
 module.exports = app;

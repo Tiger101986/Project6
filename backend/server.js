@@ -6,7 +6,7 @@ require('dotenv').config();
  * AND set the server up to listen on either the port environment variable or port 3000 for development
 */
 const http = require('http');
-const app = require('./app');// import app file 
+const app = require('./app');
 
 //Adding port normalization, error handling and basic logging 
 //to your Node server makes app run more consistently and easier to debug.
@@ -22,11 +22,11 @@ const normalizePort = val => {
     return false;
 };
 
-// process.env.PORT???
+// set port to app file app.set('port', process.env.PORT || 3000); 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-// set port to app file app.set('port', process.env.PORT || 3000); 
+
 
 // Check for various errors and handle them to register to the server
 const errorHandler = error => {

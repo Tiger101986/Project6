@@ -1,7 +1,8 @@
-//import models folder 
+//import model of sauce folder and bilt-in module file system fs()  
 const Sauce = require('../models/sauce');
 const fileSystem = require('fs')
 
+//Creating sauce card and save 
 exports.createSauce = (req, res, next) => {
     const url = req.protocol + '://' + req.get('host');
     req.body.sauce = JSON.parse(req.body.sauce);
@@ -33,7 +34,7 @@ exports.createSauce = (req, res, next) => {
         );
 };
 
-// Retrieving a Specific Thing - Single sauce with .get() and findOne() methods
+// Displaying single sauce card
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({
         _id: req.params.id
@@ -48,7 +49,7 @@ exports.getOneSauce = (req, res, next) => {
     );
 };
 
-//Update an existing Sauce with .put() and updateOne() methods
+//Updating an existed Sauce card
 exports.modifySauce = (req, res, next) => {
     let sauce = new Sauce({ _id: req.params._id });
     if (req.file) {
@@ -99,7 +100,7 @@ exports.modifySauce = (req, res, next) => {
     );
 }
 
-//Delete a Sauce with .findOne(), fs.unlink() and deleteOne() methods
+//Delete a Sauce card
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id }).then(
         (sauce) => {
@@ -133,7 +134,7 @@ exports.deleteSauce = (req, res, next) => {
     );
 };
 
-// Retrieving a list of Thing - Array sauces
+// Display all sauce cards
 exports.getAllSauces = (req, res, next) => {
     Sauce.find().then((sauces) => {
         res.status(200).json(sauces);
@@ -146,24 +147,7 @@ exports.getAllSauces = (req, res, next) => {
     );
 }
 
-/**
- * TODO: 
- * The id for the post will be in the url, and can be fetched in the code from req.params.id 
- * (just like what was done for getting one post based on the id provided in the url)
- * The userId and “like” number (either 1, 0, or -1 -- see API requirements) will be provided in the req.body
- *  (just like when the sauce is updated)
- * if like is “1", then check to see if the user has already disliked the sauce -- and if so, 
- * then remove their user id from the dislikes array and decrease the dislike count
- * if the like is “-1”, do the opposite of what is described for “1"
- * if the like is “0”, then do what is. being done for “1" and “-1” to remove the user (if exists) from either likes or dislikes info
- * Use Sequelize the update the sauce (like you did for update sauce, but this time for the updated like information)
-    * likes: 0,
-    * dislikes: 0,
-    * usersLiked: [],
-    * usersDisliked: [],                                
-*/
-
-// Save likes status from users
+// Updating sauce card wiht likes/dislikes status from users
 exports.likeSauce = (req, res, next) => {
     let like = req.body.like;
     let userId = req.body.userId;
