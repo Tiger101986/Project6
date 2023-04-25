@@ -1,9 +1,10 @@
 /**
  * install multer package
- * import multer pacakage to upload files
+ * import multer pacakage to upload image files
  */
 const multer = require('multer');
 
+//file type of image
 const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',

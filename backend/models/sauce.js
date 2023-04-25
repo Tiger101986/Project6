@@ -1,7 +1,7 @@
-// import mongoDB Atlas
+// import mongoose package
 const mongoose = require('mongoose');
 
-//Create a data schema with Schema() function that contains the fields for each  Thing  , their type, and whether or not they are a required field. 
+//Create a sauce schema with Schema(). 
 const sauceSchema = mongoose.Schema({
     userId: {type: String, required: true},
     name: {type: String, required: true},
@@ -16,6 +16,6 @@ const sauceSchema = mongoose.Schema({
     usersDisliked: {type: [String], required: true},
 });
 
-// Export that schema as a Mongoose model, making it available for your Express app.
+// Export that schema as a Mongoose model, making it available for Express app.
 
 module.exports = mongoose.model('Sauce', sauceSchema);
